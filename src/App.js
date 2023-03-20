@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import {connect} from "react-redux";
+import {fetchStatuses, fetchTasks} from "./redux/actions";
+import {useEffect} from "react";
+import Column from "./components/Column";
+import './App.css'
 
-function App() {
+
+function App(props) {
+  useEffect(() => {
+    props.getStatuses();
+    props.getTasks()
+  }, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>{props.appName}</h1>
+      <div className="container text-center">
+        <div className="row align-items-start">
+          {props.statuses.map(status =>
+            <Column
+              key={status._id}
+              status={status}
+
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  statuses: state.statuses,
+  appName: state.appName
+})
+const mapDispatchToProps = (dispatch) => ({
+  getStatuses: () => dispatch(fetchStatuses()),
+  getTasks:()=>dispatch(fetchTasks())
+})
+export default connect(mapStateToProps, mapDispatchToProps)(App);
