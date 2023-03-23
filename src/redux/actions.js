@@ -1,4 +1,5 @@
 import axios from "axios";
+import store from "./store";
 
 export const fetchStatuses = () => {
   return (dispatch) => {
@@ -17,20 +18,41 @@ export const fetchTasks = () => {
         console.log(res.data)
         dispatch({type: "GET_TASKS", payload: res.data})
       })
-      .catch((err)=>
+      .catch((err) =>
         alert("Server Tasks is error"))
   }
 }
 
 export const changePriorityTasks = (id, updatePriorityTask) => {
   return (dispatch) => {
-
     axios.patch(`https://expressjs-server.vercel.app/tasks/${id}`, updatePriorityTask)
       .then((res) => {
         console.log(res)
         dispatch(fetchTasks())
       })
-      .catch((err)=>
+      .catch((err) =>
         alert("Server Priority is error"))
+  }
+}
+export const moveTask = (id, newStatus) => {
+  return (dispatch) => {
+    axios.patch(`https://expressjs-server.vercel.app/tasks/${id}`, {status: newStatus})
+      .then((res) => {
+        console.log(res)
+        dispatch(fetchTasks())
+      })
+      .catch((err) =>
+        alert("Server error"))
+  }
+}
+export const deleteTask = (id) => {
+  return (dispatch) => {
+    axios.delete(`https://expressjs-server.vercel.app/tasks/${id}`)
+      .then((res) => {
+        console.log(res)
+        dispatch(fetchTasks())
+      })
+      .catch((err) =>
+        alert("Server error"))
   }
 }
