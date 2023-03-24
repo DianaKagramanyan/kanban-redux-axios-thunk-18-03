@@ -17,9 +17,12 @@ function App(props) {
     <div className="App">
       <h1>{props.appName}</h1>
       <button
-        onClick={props.openModal}
-        type="button" className="btn btn-outline-info">Create Task</button>
-      <ModalWindow/>
+        onClick={() => props.openModal('Create task')}
+        type="button" className="btn btn-outline-info">Create Task
+      </button>
+
+      {props.modalIsOpen && <ModalWindow/>}
+
       <div className="container text-center">
         <div className="row align-items-start">
           {props.statuses.map(status =>
@@ -36,11 +39,12 @@ function App(props) {
 
 const mapStateToProps = (state) => ({
   statuses: state.statuses,
-  appName: state.appName
+  appName: state.appName,
+  modalIsOpen: state.modalData.open
 })
 const mapDispatchToProps = (dispatch) => ({
   getStatuses: () => dispatch(fetchStatuses()),
-  getTasks:()=>dispatch(fetchTasks()),
-  openModal: ()=> dispatch({type: 'MODAL_TOGGLE', payload: {modalTitle: 'Create new task'}})
+  getTasks: () => dispatch(fetchTasks()),
+  openModal: (modalTitle) => dispatch({type: 'MODAL_TOGGLE', payload: {modalTitle: modalTitle}})
 })
 export default connect(mapStateToProps, mapDispatchToProps)(App);

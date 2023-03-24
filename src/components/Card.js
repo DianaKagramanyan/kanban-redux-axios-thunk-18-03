@@ -49,7 +49,7 @@ const Card = (props) => {
             type="button" className="btn btn-outline-danger">Delete
           </button>
           <button
-            onClick={() => props.openModal('Edit task')}
+            onClick={() => props.openModal('Edit task',props.task )}
             type="button" className="btn btn-outline-warning">Edit
           </button>
         </li>

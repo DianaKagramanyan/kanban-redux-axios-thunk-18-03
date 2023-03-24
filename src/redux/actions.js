@@ -1,5 +1,5 @@
 import axios from "axios";
-import store from "./store";
+
 
 export const fetchStatuses = () => {
   return (dispatch) => {
@@ -15,7 +15,6 @@ export const fetchTasks = () => {
   return (dispatch) => {
     axios.get('https://expressjs-server.vercel.app/tasks')
       .then((res) => {
-        console.log(res.data)
         dispatch({type: "GET_TASKS", payload: res.data})
       })
       .catch((err) =>
@@ -48,6 +47,28 @@ export const moveTask = (id, newStatus) => {
 export const deleteTask = (id) => {
   return (dispatch) => {
     axios.delete(`https://expressjs-server.vercel.app/tasks/${id}`)
+      .then((res) => {
+        console.log(res)
+        dispatch(fetchTasks())
+      })
+      .catch((err) =>
+        alert("Server error"))
+  }
+}
+export const createTask = (newTask) => {
+  return (dispatch) => {
+    axios.post(`https://expressjs-server.vercel.app/tasks/`, newTask)
+      .then((res) => {
+        console.log(res)
+        dispatch(fetchTasks())
+      })
+      .catch((err) =>
+        alert("Server error"))
+  }
+}
+export const editTask = (id, updateTask) => {
+  return (dispatch) => {
+    axios.patch(`https://expressjs-server.vercel.app/tasks/${id}`, updateTask)
       .then((res) => {
         console.log(res)
         dispatch(fetchTasks())
